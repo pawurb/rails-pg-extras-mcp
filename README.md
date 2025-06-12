@@ -1,9 +1,8 @@
 # Rails PG Extras MCP [![Gem Version](https://badge.fury.io/rb/rails-pg-extras-mcp.svg)](https://badge.fury.io/rb/rails-pg-extras-mcp) [![GH Actions](https://github.com/pawurb/rails-pg-extras-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/pawurb/rails-pg-extras-mcp/actions)
 
+MCP ([Model Context Protocol](https://modelcontextprotocol.io/introduction)) interface for [rails-pg-extras](https://github.com/pawurb/rails-pg-extras) gem. It enables PostgreSQL metadata and performance analysis with a simple LLM prompt.  
 
-MCP ([Model Context Protocol](https://modelcontextprotocol.io/introduction)) interface for [rails-pg-extras](https://github.com/pawurb/rails-pg-extras) gem. 
-
-A tool for those adventurous enough to connect LLMs directly to the database.
+![LLM interface](https://github.com/pawurb/rails-pg-extras/raw/main/pg-extras-mcp.png)
 
 ## Installation
 
@@ -44,8 +43,6 @@ and in your LLM of choice:
 ```
 
 You can now ask LLM questions about the metadata and performance metrics of your database.
-
-![LLM interface](https://github.com/pawurb/rails-pg-extras/raw/main/pg-extras-mcp.png)
 
 ## Status
 
