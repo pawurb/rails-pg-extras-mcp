@@ -10,4 +10,3 @@ describe RailsPgExtrasMcp do
     }.not_to raise_error
   end
 end
-

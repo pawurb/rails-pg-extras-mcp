@@ -63,6 +63,63 @@ class DiagnoseTool < FastMcp::Tool
   end
 end
 
+class ExplainBaseTool < FastMcp::Tool
+  DENYLIST = %w[
+    delete,
+    insert,
+    update,
+    truncate,
+    drop,
+    alter,
+    create,
+    grant,
+    begin,
+    commit,
+  ]
+
+  arguments do
+    required(:query).filled(:string).description("The query to debug")
+  end
+
+  def call(query:)
+    connection = RailsPgExtras.connection
+
+    if DENYLIST.any? { |deny| query.downcase.include?(deny) }
+      raise "This query is not allowed. It contains a denied keyword. Denylist: #{DENYLIST.join(", ")}"
+    end
+
+    connection.execute("BEGIN")
+    result = connection.execute("#{query}")
+    connection.execute("ROLLBACK")
+
+    result.to_a
+  end
+end
+
+class ExplainTool < ExplainBaseTool
+  description "EXPLAIN a query. It must be an SQL string, without the EXPLAIN prefix"
+
+  def self.name
+    "explain_analyze"
+  end
+
+  def call(query:)
+    super(query: "EXPLAIN #{query}")
+  end
+end
+
+class ExplainAnalyzeTool < ExplainBaseTool
+  description "EXPLAIN ANALYZE a query. It must be an SQL string, without the EXPLAIN ANALYZE prefix"
+
+  def self.name
+    "explain_analyze"
+  end
+
+  def call(query:)
+    super(query: "EXPLAIN ANALYZE #{query}")
+  end
+end
+
 class ReadmeResource < FastMcp::Resource
   uri "https://raw.githubusercontent.com/pawurb/rails-pg-extras/refs/heads/main/README.md"
   resource_name "README"
@@ -93,6 +150,8 @@ module RailsPgExtrasMcp
         server.register_tools(MissingFkConstraintsTool)
         server.register_tools(MissingFkIndexesTool)
         server.register_tools(*QUERY_TOOL_CLASSES)
+        server.register_tools(ExplainTool) if ENV["PG_EXTRAS_MCP_EXPLAIN_ENABLED"] == "true"
+        server.register_tools(ExplainAnalyzeTool) if ENV["PG_EXTRAS_MCP_EXPLAIN_ANALYZE_ENABLED"] == "true"
 
         server.register_resource(ReadmeResource)
 
