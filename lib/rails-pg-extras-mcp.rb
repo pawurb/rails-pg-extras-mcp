@@ -75,6 +75,7 @@ class ExplainBaseTool < FastMcp::Tool
     grant,
     begin,
     commit,
+    ;
   ]
 
   arguments do
@@ -104,6 +105,10 @@ class ExplainTool < ExplainBaseTool
   end
 
   def call(query:)
+    if query.downcase.include?("analyze")
+      raise "This query is not allowed. It contains a denied ANALYZE keyword."
+    end
+
     super(query: "EXPLAIN #{query}")
   end
 end
