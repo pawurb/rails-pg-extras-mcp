@@ -101,7 +101,7 @@ class ExplainTool < ExplainBaseTool
   description "EXPLAIN a query. It must be an SQL string, without the EXPLAIN prefix"
 
   def self.name
-    "explain_analyze"
+    "explain"
   end
 
   def call(query:)
