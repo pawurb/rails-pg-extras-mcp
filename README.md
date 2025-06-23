@@ -1,6 +1,6 @@
 # Rails PG Extras MCP [![Gem Version](https://badge.fury.io/rb/rails-pg-extras-mcp.svg)](https://badge.fury.io/rb/rails-pg-extras-mcp) [![GH Actions](https://github.com/pawurb/rails-pg-extras-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/pawurb/rails-pg-extras-mcp/actions)
 
-MCP ([Model Context Protocol](https://modelcontextprotocol.io/introduction)) interface for [rails-pg-extras](https://github.com/pawurb/rails-pg-extras) gem. It enables PostgreSQL metadata and performance analysis with a simple LLM prompt.  
+MCP ([Model Context Protocol](https://modelcontextprotocol.io/introduction)) interface for [rails-pg-extras](https://github.com/pawurb/rails-pg-extras) gem. Easily explore PostgreSQL performance and metadata. Check for table bloat, slow queries, unused indexes, and more. Run `EXPLAIN ANALYZE` on bottlenecks and get clear, LLM-powered insights to optimize your database.
 
 ![LLM interface](https://github.com/pawurb/rails-pg-extras/raw/main/pg-extras-mcp.png)
 
