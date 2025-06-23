@@ -138,19 +138,29 @@ end
 
 module RailsPgExtrasMcp
   class App
-    def self.build
+    def self.build(auth_token: nil)
       app = lambda do |_env|
         [200, { "Content-Type" => "text/html" },
          ["<html><body><h1>Hello from Rack!</h1><p>This is a simple Rack app with MCP middleware.</p></body></html>"]]
       end
 
-      # Create the MCP middleware
-      mcp_app = FastMcp.rack_middleware(
-        app,
-        name: "rails-pg-extras-mcp", version: RailsPgExtrasMcp::VERSION,
+      opts = {
+        name: "rails-pg-extras-mcp",
+        version: RailsPgExtrasMcp::VERSION,
         path_prefix: "/pg-extras-mcp",
         logger: Logger.new($stdout),
-      ) do |server|
+      }
+
+      if auth_token.present?
+        opts[:auth_token] = auth_token
+      end
+
+      rack_method_name = auth_token.present? ? :authenticated_rack_middleware : :rack_middleware
+
+      # Create the MCP middleware
+      mcp_app = FastMcp.public_send(rack_method_name,
+                                    app,
+                                    **opts) do |server|
         server.register_tools(DiagnoseTool)
         server.register_tools(MissingFkConstraintsTool)
         server.register_tools(MissingFkIndexesTool)

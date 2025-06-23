@@ -16,8 +16,13 @@ The library supports MCP protocol via HTTP SSE interface.
 `config/routes.rb`
 
 ```ruby
-# Authentication is not yet supported
 mount RailsPgExtras.mcp_app, at: "pg-extras-mcp"
+```
+
+with optional authorization:
+
+```ruby
+mount RailsPgExtras.mcp_app(auth_token: "secret"), at: "pg-extras-mcp"
 ```
 
 Install [mcp-remote](https://github.com/geelen/mcp-remote):
@@ -35,7 +40,9 @@ and in your LLM of choice:
       "command": "npx",
       "args": [
         "mcp-remote",
-        "http://localhost:3000/pg-extras-mcp/sse"
+        "http://localhost:3000/pg-extras-mcp/sse",
+        "--header",
+        "Authorization: secret"
       ]
     }
   }
