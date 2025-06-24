@@ -16,16 +16,19 @@ The library supports MCP protocol via HTTP SSE interface.
 `config/routes.rb`
 
 ```ruby
-mount RailsPgExtras.mcp_app, at: "pg-extras-mcp"
+mount RailsPgExtrasMcp::App.build, at: "pg-extras-mcp"
 ```
 
 with optional authorization:
 
 ```ruby
-mount RailsPgExtras.mcp_app(auth_token: "secret"), at: "pg-extras-mcp"
+opts = { auth_token: "secret" }
+mount RailsPgExtrasMcp::App.build(opts), at: "pg-extras-mcp"
 ```
 
-Install [mcp-remote](https://github.com/geelen/mcp-remote):
+Refer to the [fast-mcp docs](https://github.com/yjacquin/fast-mcp) for a complete list of supported options (the `opts` hash is passed directly as-is). For real-world deployments, you'll likely need to configure the `:allowed_origins` setting.
+
+Next, install [mcp-remote](https://github.com/geelen/mcp-remote):
 
 ```bash
 npm install -g mcp-remote
