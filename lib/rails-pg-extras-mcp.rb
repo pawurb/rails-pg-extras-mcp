@@ -152,6 +152,10 @@ class TableInfoTool < FastMcp::Tool
   def call(table_name:)
     RailsPgExtras.table_info(args: { table_name: table_name }, in_format: :hash)
   end
+
+  def self.name
+    "table_info"
+  end
 end
 
 class TableSchemaTool < FastMcp::Tool
