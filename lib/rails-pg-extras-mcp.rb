@@ -126,6 +126,50 @@ class ExplainAnalyzeTool < ExplainBaseTool
   end
 end
 
+class IndexInfoTool < FastMcp::Tool
+  description "Shows information about table indexes: name, table name, columns, index size, index scans, null frac"
+
+  arguments do
+    required(:table_name).filled(:string).description("The table name to get index info for")
+  end
+
+  def call(table_name:)
+    RailsPgExtras.index_info(args: { table_name: table_name }, in_format: :hash)
+  end
+
+  def self.name
+    "index_info"
+  end
+end
+
+class TableInfoTool < FastMcp::Tool
+  description "Shows information about a table: name, size, cache hit, estimated rows, sequential scans, indexes scans"
+
+  arguments do
+    required(:table_name).filled(:string).description("The table name to get info for")
+  end
+
+  def call(table_name:)
+    RailsPgExtras.table_info(args: { table_name: table_name }, in_format: :hash)
+  end
+end
+
+class TableSchemaTool < FastMcp::Tool
+  description "Shows the schema of a table"
+
+  arguments do
+    required(:table_name).filled(:string).description("The table name to get schema for")
+  end
+
+  def call(table_name:)
+    RailsPgExtras.table_schema(args: { table_name: table_name }, in_format: :hash)
+  end
+
+  def self.name
+    "table_schema"
+  end
+end
+
 class ReadmeResource < FastMcp::Resource
   uri "https://raw.githubusercontent.com/pawurb/rails-pg-extras/refs/heads/main/README.md"
   resource_name "README"
@@ -163,6 +207,9 @@ module RailsPgExtrasMcp
         server.register_tools(DiagnoseTool)
         server.register_tools(MissingFkConstraintsTool)
         server.register_tools(MissingFkIndexesTool)
+        server.register_tools(IndexInfoTool)
+        server.register_tools(TableInfoTool)
+        server.register_tools(TableSchemaTool)
         server.register_tools(*QUERY_TOOL_CLASSES)
         server.register_tools(ExplainTool) if ENV["PG_EXTRAS_MCP_EXPLAIN_ENABLED"] == "true"
         server.register_tools(ExplainAnalyzeTool) if ENV["PG_EXTRAS_MCP_EXPLAIN_ANALYZE_ENABLED"] == "true"
