@@ -79,19 +79,15 @@ class ExplainBaseTool < FastMcp::Tool
     ;
   ]
 
-  arguments do
-    required(:query).filled(:string).description("The query to debug")
-  end
-
-  def call(query:)
+  def call(sql_query:)
     connection = RailsPgExtras.connection
 
-    if DENYLIST.any? { |deny| query.downcase.include?(deny) }
+    if DENYLIST.any? { |deny| sql_query.downcase.include?(deny) }
       raise "This query is not allowed. It contains a denied keyword. Denylist: #{DENYLIST.join(", ")}"
     end
 
     connection.execute("BEGIN")
-    result = connection.execute("#{query}")
+    result = connection.execute("#{sql_query}")
     connection.execute("ROLLBACK")
 
     result.to_a
@@ -101,28 +97,36 @@ end
 class ExplainTool < ExplainBaseTool
   description "EXPLAIN a query. It must be an SQL string, without the EXPLAIN prefix"
 
+  arguments do
+    required(:sql_query).filled(:string).description("The SQL query to debug")
+  end
+
   def self.name
     "explain"
   end
 
-  def call(query:)
-    if query.downcase.include?("analyze")
+  def call(sql_query:)
+    if sql_query.downcase.include?("analyze")
       raise "This query is not allowed. It contains a denied ANALYZE keyword."
     end
 
-    super(query: "EXPLAIN #{query}")
+    super(sql_query: "EXPLAIN #{sql_query}")
   end
 end
 
 class ExplainAnalyzeTool < ExplainBaseTool
   description "EXPLAIN ANALYZE a query. It must be an SQL string, without the EXPLAIN ANALYZE prefix"
 
+  arguments do
+    required(:sql_query).filled(:string).description("The SQL query to debug")
+  end
+
   def self.name
     "explain_analyze"
   end
 
-  def call(query:)
-    super(query: "EXPLAIN ANALYZE #{query}")
+  def call(sql_query:)
+    super(sql_query: "EXPLAIN ANALYZE #{sql_query}")
   end
 end
 
