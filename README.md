@@ -25,7 +25,12 @@ opts = { auth_token: "secret" }
 mount RailsPgExtrasMcp::App.build(opts), at: "pg_extras_mcp"
 ```
 
-Refer to the [fast-mcp docs](https://github.com/yjacquin/fast-mcp) for a complete list of supported options (the `opts` hash is passed directly as-is). For real-world deployments, you'll likely need to configure the `:allowed_origins` setting.
+Refer to the [fast-mcp docs](https://github.com/yjacquin/fast-mcp) for a complete list of supported options (the `opts` hash is passed directly as-is). For production deployments, you'll likely need a similar config:
+
+```ruby
+opts = { allowed_origins: [ /.*./ ], allowed_ips: [ "*" ], auth_token: "secret", localhost_only: false }
+mount RailsPgExtrasMcp::App.build(opts) at: "pg_extras_mcp"
+```
 
 Next, install [mcp-remote](https://github.com/geelen/mcp-remote):
 

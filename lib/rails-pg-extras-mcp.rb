@@ -157,9 +157,9 @@ module RailsPgExtrasMcp
       rack_method_name = opts[:auth_token].present? ? :authenticated_rack_middleware : :rack_middleware
 
       # Create the MCP middleware
-      mcp_app = FastMcp.public_send(rack_method_name,
-                                    app,
-                                    **opts) do |server|
+      FastMcp.public_send(rack_method_name,
+                          app,
+                          **opts) do |server|
         server.register_tools(DiagnoseTool)
         server.register_tools(MissingFkConstraintsTool)
         server.register_tools(MissingFkIndexesTool)
@@ -168,8 +168,6 @@ module RailsPgExtrasMcp
         server.register_tools(ExplainAnalyzeTool) if ENV["PG_EXTRAS_MCP_EXPLAIN_ANALYZE_ENABLED"] == "true"
 
         server.register_resource(ReadmeResource)
-
-        Rack::Builder.new { run mcp_app }
       end
     end
   end
