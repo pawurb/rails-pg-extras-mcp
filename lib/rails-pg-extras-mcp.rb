@@ -148,7 +148,7 @@ module RailsPgExtrasMcp
       default_opts = {
         name: "rails-pg-extras-mcp",
         version: RailsPgExtrasMcp::VERSION,
-        path_prefix: "/pg-extras-mcp",
+        path_prefix: "/pg_extras_mcp",
         logger: Logger.new($stdout),
       }
 

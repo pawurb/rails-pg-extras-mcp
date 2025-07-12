@@ -7,7 +7,6 @@ MCP ([Model Context Protocol](https://modelcontextprotocol.io/introduction)) int
 ## Installation
 
 ```bash
-bundle add rails-pg-extras
 bundle add rails-pg-extras-mcp
 ```
 
@@ -16,14 +15,14 @@ The library supports MCP protocol via HTTP SSE interface.
 `config/routes.rb`
 
 ```ruby
-mount RailsPgExtrasMcp::App.build, at: "pg-extras-mcp"
+mount RailsPgExtrasMcp::App.build, at: "pg_extras_mcp"
 ```
 
 with optional authorization:
 
 ```ruby
 opts = { auth_token: "secret" }
-mount RailsPgExtrasMcp::App.build(opts), at: "pg-extras-mcp"
+mount RailsPgExtrasMcp::App.build(opts), at: "pg_extras_mcp"
 ```
 
 Refer to the [fast-mcp docs](https://github.com/yjacquin/fast-mcp) for a complete list of supported options (the `opts` hash is passed directly as-is). For real-world deployments, you'll likely need to configure the `:allowed_origins` setting.
@@ -43,7 +42,7 @@ and in your LLM of choice:
       "command": "npx",
       "args": [
         "mcp-remote",
-        "http://localhost:3000/pg-extras-mcp/sse",
+        "http://localhost:3000/pg_extras_mcp/sse",
         "--header",
         "Authorization: secret"
       ]
