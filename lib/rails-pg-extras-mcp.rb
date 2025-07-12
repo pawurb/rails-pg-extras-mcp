@@ -75,8 +75,7 @@ class ExplainBaseTool < FastMcp::Tool
     create,
     grant,
     begin,
-    commit,
-    ;
+    commit
   ]
 
   def call(sql_query:)
