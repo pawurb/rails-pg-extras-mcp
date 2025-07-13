@@ -67,7 +67,7 @@ You can enable them by setting the following `ENV` variables:
 `ENV['PG_EXTRAS_MCP_EXPLAIN_ENABLED'] = 'true'`
 `ENV['PG_EXTRAS_MCP_EXPLAIN_ANALYZE_ENABLED'] = 'true'`
 
-Enabling these features means that an LLM, can run arbitrary queries in your database. The execution context is wrapped in a transaction and rolled back, so, in theory, any data modification should not be possible. But it's advised to configure a read-only permission if you want to use these features. By specifying `ENV['RAILS_PG_EXTRAS_DATABASE_URL']` you can overwrite the default Rails ActiveRecord database connection to restrict an access scope.
+Enabling these features means that an LLM, can run arbitrary queries in your database. The execution context is wrapped in a transaction and rolled back, so, in theory, any data modification should not be possible. But it's advised to configure a read-only permission if you want to use these features. By specifying `ENV['RAILS_PG_EXTRAS_MCP_DATABASE_URL']` you can overwrite the default Rails ActiveRecord database connection to restrict an access scope:
 
 ## Status
 

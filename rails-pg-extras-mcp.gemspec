@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.test_files = s.files.grep(%r{^(spec)/})
   s.require_paths = ["lib"]
   s.license = "MIT"
-  s.add_dependency "rails-pg-extras", "~> 5.6"
+  s.add_dependency "rails-pg-extras", "~> 5.6.12"
   s.add_dependency "rails"
   s.add_dependency "fast-mcp"
   s.add_development_dependency "rake"

@@ -222,6 +222,10 @@ module RailsPgExtrasMcp
         server.register_tools(ExplainAnalyzeTool) if ENV["PG_EXTRAS_MCP_EXPLAIN_ANALYZE_ENABLED"] == "true"
 
         server.register_resource(ReadmeResource)
+
+        if !ENV["RAILS_PG_EXTRAS_MCP_DATABASE_URL"].to_s.empty?
+          RailsPgExtras.database_url = ENV["RAILS_PG_EXTRAS_MCP_DATABASE_URL"]
+        end
       end
     end
   end
