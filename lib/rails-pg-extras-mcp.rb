@@ -85,9 +85,12 @@ class ExplainBaseTool < FastMcp::Tool
       raise "This query is not allowed. It contains a denied keyword. Denylist: #{DENYLIST.join(", ")}"
     end
 
-    connection.execute("BEGIN")
+    # Prevent multiple queries in one request
+    sql_query = sql_query.gsub(/;/, "")
+
+    connection.execute("BEGIN;")
     result = connection.execute("#{sql_query}")
-    connection.execute("ROLLBACK")
+    connection.execute("ROLLBACK;")
 
     result.to_a
   end
