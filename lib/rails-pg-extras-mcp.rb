@@ -89,10 +89,14 @@ class ExplainBaseTool < FastMcp::Tool
     sql_query = sql_query.gsub(/;/, "")
 
     connection.execute("BEGIN;")
-    result = connection.execute("#{sql_query}")
-    connection.execute("ROLLBACK;")
-
-    result.to_a
+    begin
+      result = connection.execute("#{sql_query}")
+      connection.execute("ROLLBACK;")
+      result.to_a
+    rescue => e
+      connection.execute("ROLLBACK;") rescue nil
+      raise e
+    end
   end
 end
 
