@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "rails-pg-extras"
+require "rails-pg-extras-mcp"
 
 describe RailsPgExtrasMcp do
   it "works" do

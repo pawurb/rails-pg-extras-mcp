@@ -5,6 +5,7 @@ require "rack"
 require "ruby-pg-extras"
 require "rails-pg-extras"
 require "rails_pg_extras_mcp/version"
+require "rails_pg_extras_mcp/validate_query"
 
 SKIP_QUERIES = %i[
   add_extensions
@@ -65,28 +66,9 @@ class DiagnoseTool < FastMcp::Tool
 end
 
 class ExplainBaseTool < FastMcp::Tool
-  DENYLIST = %w[
-    delete,
-    insert,
-    update,
-    truncate,
-    drop,
-    alter,
-    create,
-    grant,
-    begin,
-    commit
-  ]
-
   def call(sql_query: nil)
     connection = RailsPgExtras.connection
 
-    if DENYLIST.any? { |deny| sql_query.downcase.include?(deny) }
-      raise "This query is not allowed. It contains a denied keyword. Denylist: #{DENYLIST.join(", ")}"
-    end
-
-    # Prevent multiple queries in one request
-    sql_query = sql_query.gsub(/;/, "")
 
     connection.execute("BEGIN;")
     begin
@@ -116,8 +98,10 @@ class ExplainTool < ExplainBaseTool
       return "sql_query param is required"
     end  
 
-    if sql_query.downcase.include?("analyze")
-      raise "This query is not allowed. It contains a denied ANALYZE keyword."
+    begin
+      ValidateQuery.new(sql_query).call
+    rescue ValidateQuery::InvalidQueryError => e
+      return e.message
     end
 
     super(sql_query: "EXPLAIN #{sql_query}")
@@ -139,6 +123,12 @@ class ExplainAnalyzeTool < ExplainBaseTool
     if sql_query.to_s.empty?
       return "sql_query param is required"
     end  
+
+    begin
+      ValidateQuery.new(sql_query).call
+    rescue ValidateQuery::InvalidQueryError => e
+      return e.message
+    end
 
     super(sql_query: "EXPLAIN ANALYZE #{sql_query}")
   end

@@ -18,6 +18,7 @@ Gem::Specification.new do |s|
   s.add_dependency "rails-pg-extras", "~> 5.6.12"
   s.add_dependency "rails"
   s.add_dependency "fast-mcp"
+  s.add_dependency "pg_query"
   s.add_development_dependency "rake"
   s.add_development_dependency "rspec"
   s.add_development_dependency "rufo"
