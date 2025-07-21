@@ -78,7 +78,7 @@ class ExplainBaseTool < FastMcp::Tool
     commit
   ]
 
-  def call(sql_query:)
+  def call(sql_query: nil)
     connection = RailsPgExtras.connection
 
     if DENYLIST.any? { |deny| sql_query.downcase.include?(deny) }
@@ -112,6 +112,10 @@ class ExplainTool < ExplainBaseTool
   end
 
   def call(sql_query:)
+    if sql_query.to_s.empty?
+      return "sql_query param is required"
+    end  
+
     if sql_query.downcase.include?("analyze")
       raise "This query is not allowed. It contains a denied ANALYZE keyword."
     end
@@ -132,6 +136,10 @@ class ExplainAnalyzeTool < ExplainBaseTool
   end
 
   def call(sql_query:)
+    if sql_query.to_s.empty?
+      return "sql_query param is required"
+    end  
+
     super(sql_query: "EXPLAIN ANALYZE #{sql_query}")
   end
 end
@@ -144,6 +152,10 @@ class IndexInfoTool < FastMcp::Tool
   end
 
   def call(table_name:)
+    if table_name.to_s.empty?
+      return "table_name param is required"
+    end  
+
     RailsPgExtras.index_info(args: { table_name: table_name }, in_format: :hash)
   end
 
@@ -160,6 +172,10 @@ class TableInfoTool < FastMcp::Tool
   end
 
   def call(table_name:)
+    if table_name.to_s.empty?
+      return "table_name param is required"
+    end  
+
     RailsPgExtras.table_info(args: { table_name: table_name }, in_format: :hash)
   end
 
